@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:jaxrs="http://cxf.apache.org/jaxrs" xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:websocket="http://www.springframework.org/schema/websocket"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:task="http://www.springframework.org/schema/task"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-       http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+       xmlns:security="http://www.springframework.org/schema/security"
+
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+       ">
 
     <context:annotation-config/>
 
@@ -16,5 +19,38 @@
 
     <jaxrs:server id="resourceServer" address="/resource" basePackages="ser.i.sssk">
     </jaxrs:server>
+
+    <context:component-scan base-package="org.springframework.security.saml"/>
+
+    <security:http entry-point-ref="samlEntryPoint">
+        <security:custom-filter before="FIRST" ref="metadataGeneratorFilter"/>
+        <security:custom-filter after="BASIC_AUTH_FILTER" ref="samlFilter"/>
+    </security:http>
+
+    <bean name="metadataGeneratorFilter" class="org.springframework.security.saml.metadata.MetadataGeneratorFilter">
+    </bean>
+
+
+
+    <bean class="org.springframework.security.saml.metadata.MetadataGenerator">
+        <property name="bindingsSSO"><list><value>artifact</value></list></property>
+        <property name="bindingsSLO"><list><value>redirect</value></list></property>
+        <property name="bindingsHoKSSO"><list/></property>
+    </bean>
+
+    <bean name="keyManager" class="org.springframework.security.saml.key.EmptyKeyManager"/>
+
+    <bean name="metadataManager" class="org.springframework.security.saml.metadata.MetadataManager">
+        <constructor-arg>
+            <list>
+                <bean class="org.opensaml.saml2.metadata.provider.FilesystemMetadataProvider">
+                    <constructor-arg>
+                        <value type="java.io.File">classpath:idp-meta.xml</value>
+                    </constructor-arg>
+                </bean>
+            </list>
+        </constructor-arg>
+    </bean>
+
 
 </beans>

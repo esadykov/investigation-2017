@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EntityDescriptor entityID="http://localhost:8180/auth/realms/nic-test-realm"
+                  xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <IDPSSODescriptor WantAuthnRequestsSigned="true"
+                      protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified</NameIDFormat>
+        <NameIDFormat>urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress</NameIDFormat>
+
+        <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+                             Location="http://localhost:8180/auth/realms/nic-test-realm/protocol/saml" />
+        <SingleLogoutService
+                Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+                Location="http://localhost:8180/auth/realms/nic-test-realm/protocol/saml" />
+        <KeyDescriptor use="signing">
+            <dsig:KeyInfo xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
+                <dsig:X509Data>
+                    <dsig:X509Certificate>
+                        MIIBpjCCAQ8CBgFe54HJ+zANBgkqhkiG9w0BAQsFADAZMRcwFQYDVQQDDA5uaWMtdGVzdC1yZWFsbTAeFw0xNzEwMDQxMzA4MTZaFw0yNzEwMDQxMzA5NTZaMBkxFzAVBgNVBAMMDm5pYy10ZXN0LXJlYWxtMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCrVrCuTtArbgaZzL1hvh0xtL5mc7o0NqPVnYXkLvgcwiC3BjLGw1tGEGoJaXDuSaRllobm53JBhjx33UNv+5z/UMG4kytBWxheNVKnL6GgqlNabMaFfPLPCF8kAgKnsi79NMo+n6KnSY8YeUmec/p2vjO2NjsSAVcWEQMVhJ31LwIDAQABMA0GCSqGSIb3DQEBCwUAA4GBAJ6TO61KhTtBEBaQ8lcdKpBKzg+3KrbYh+mcYGgrwcHWYbmdndgmjryfttsndZx9GKw1rueaEvJI7KO7eeoL2FT8GbIU3rGFS9UnC0Sm2ANajKBYd31QKUYclOF7fVM0VX19jSNDl8XELL6H91bI5L3YUr6qXaQoScHEjXQXLyxv
+                    </dsig:X509Certificate>
+                </dsig:X509Data>
+            </dsig:KeyInfo>
+        </KeyDescriptor>
+    </IDPSSODescriptor>
+</EntityDescriptor>
